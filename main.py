@@ -14,8 +14,13 @@ file = st.file_uploader("Download an invoice in Excel", key='file_name')
 pdf = FPDF(orientation='L', unit="mm", format='a4')
 
 # read the dataset and show 10 first rows
-df = functions.read_data(file)
-st.write(df.head(10))
+if file is not None:
+    df = functions.read_data(file)
+    display_rows = st.checkbox("Display the document?")
+    if display_rows:
+        number_rows_to_display = st.text_input("How many rows do you want to display?")
+        if number_rows_to_display:
+            st.write(df.head(int(number_rows_to_display)))
 
 # convert the file to pdf
 button_convert = st.button("Convert to PDF")
@@ -24,5 +29,6 @@ button_convert = st.button("Convert to PDF")
 
 # download the file in pdf
 if button_convert:
+    file_name = st.text_input("Name the file")  # check if naming is allowed when downloading
     st.write("Download the PDF file")  # delete it once the convert function is added
     # st.download_button("Download the PDF file")
